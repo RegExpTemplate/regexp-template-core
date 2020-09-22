@@ -17,7 +17,7 @@
  * @param {RegExp} regexp
  * @returns {string} the processed regexp.
  */
-function processRegExp(regexp) {
+function getRegExpPattern(regexp) {
   // convert to string
   const reStr = regexp.toString();
 
@@ -38,7 +38,7 @@ function processRegExp(regexp) {
  */
 function processElement(element) {
   if (element instanceof RegExp) {
-    const regExpElements = processRegExp(element);
+    const regExpElements = getRegExpPattern(element);
 
     // TEMP will change when vars are introduced
     const varSplit = [regExpElements];
