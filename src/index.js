@@ -21,11 +21,11 @@ function getRegExpPattern(regexp) {
   // convert to string
   const reStr = regexp.toString();
 
-  // remove flags and last slash
+  // find the index of the last slash
   let endIndex = reStr.length;
-  while (reStr[--endIndex] !== "/") {}
+  while (reStr[endIndex] !== '/') endIndex--;
 
-  // return all except the first slash
+  // return the regexp pattern
   return reStr.substring(1, endIndex);
 }
 
