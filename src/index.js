@@ -32,18 +32,66 @@ function getRegExpPattern(regexp) {
 
 /**
  * !!! internal helper function !!!
+ *
+ * @param {string} regExpPattern pattern to
+ * search and slit by vars
+ *
+ * @returns {string[]} an array with
+ * all parts separated by the found variables.
+ * The odd positions contain the variables' names.
+ */
+function splitVars(regExpPattern) {
+  return regExpPattern.split( /\\V\s*\{\s*([a-zA-Z]\w*)\s*\}/g );
+}
+
+/**
+ * !!! internal helper function !!!
+ * Process regexp for template.
+ * Get pattern, create node if necessary,
+ * add node and process variables.
+ *
+ * @param {RegExp} regexp RegExp to be processed.
+ *
+ * @param {TemplateNode[]} templateStack
+ * the target RegExpTemplate's templateStack.
+ *
+ * @returns {string|TemplateNode} the processed regexp.
+ */
+function processRegExp(regexp, templateStack) {
+  const regExpPattern = getRegExpPattern(regexp);
+
+  const varSplit = splitVars(regExpPattern);
+
+  // if a variable is found then
+  // the varSplit array's length is >= 3
+  if (varSplit.length > 1) {
+    const node = new TemplateNode(templateStack.length);
+
+    node._body = varSplit;
+
+    templateStack.push(node);
+
+    return node;
+  }
+
+  return varSplit[0];
+}
+
+/**
+ * !!! internal helper function !!!
  * Process input element to an valid TemplateInternal.
- * @param {*} element
+ *
+ * @param {*} element element to process.
+ *
+ *
+ * @param {TemplateNode[]} templateStack
+ * the target RegExpTemplate's templateStack.
+ *
  * @returns {TemplateInternal}
  */
-function processElement(element) {
+function processElement(element, templateStack) {
   if (element instanceof RegExp) {
-    const regExpElements = getRegExpPattern(element);
-
-    // TEMP will change when vars are introduced
-    const varSplit = [regExpElements];
-
-    return varSplit[0];
+    return processRegExp(element, templateStack);
   }
   else if (element instanceof RegExpTemplate) {
     return element;
@@ -117,7 +165,7 @@ class RegExpTemplate {
 
 
     for (const element of elements) {
-      const processedElement = processElement(element);
+      const processedElement = processElement(element, this._templateStack);
 
       rootNode.add(processedElement);
     }
