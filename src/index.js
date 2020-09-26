@@ -64,7 +64,7 @@ function processRegExp(regexp, templateStack) {
 
   // if a variable is found then
   // the varSplit array's length is >= 3
-  if (varSplit.length > 1) {
+  if (varSplit.length >= 3) {
     const node = new TemplateNode(templateStack.length);
 
     node._body = varSplit;
