@@ -55,9 +55,13 @@ function splitVars(regExpPattern) {
  * @param {TemplateNode[]} templateStack
  * the target RegExpTemplate's templateStack.
  *
+ * @param {number[]} parents array of indexes of
+ * the parents on the templateStack.
+ * Only used if the passed regexp generates a new node.
+ *
  * @returns {string|TemplateNode} the processed regexp.
  */
-function processRegExp(regexp, templateStack) {
+function processRegExp(regexp, templateStack, parents) {
   const regExpPattern = getRegExpPattern(regexp);
 
   const varSplit = splitVars(regExpPattern);
@@ -70,6 +74,7 @@ function processRegExp(regexp, templateStack) {
     node._body = varSplit;
 
     templateStack.push(node);
+    node._parents = parents;
 
     return node;
   }
@@ -87,11 +92,13 @@ function processRegExp(regexp, templateStack) {
  * @param {TemplateNode[]} templateStack
  * the target RegExpTemplate's templateStack.
  *
+ * @param {number[]} parents ! to be passed to processRegExp !
+ *
  * @returns {TemplateInternal}
  */
-function processElement(element, templateStack) {
+function processElement(element, templateStack, parents) {
   if (element instanceof RegExp) {
-    return processRegExp(element, templateStack);
+    return processRegExp(element, templateStack, parents);
   }
   else if (element instanceof RegExpTemplate) {
     return element;
@@ -120,6 +127,14 @@ class TemplateNode {
      * @type {TemplateInternal[]}
      */
     this._body = [];
+
+    /**
+     * array of indexes of the parent
+     * nodes on the templateStack
+     * @type {number[]}
+     */
+    this._parents = null;
+
   }
 
   /**
@@ -171,7 +186,7 @@ class RegExpTemplate {
 
 
     for (const element of elements) {
-      const processedElement = processElement(element, this._templateStack);
+      const processedElement = processElement(element, this._templateStack, [0]);
 
       rootNode.add(processedElement);
     }
