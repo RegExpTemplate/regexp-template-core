@@ -113,6 +113,12 @@ class TemplateNode {
    */
   constructor(index) {
     this._index = index;
+
+    /**
+     * Store all node's template elements
+     * and/or children nodes.
+     * @type {TemplateInternal[]}
+     */
     this._body = [];
   }
 
