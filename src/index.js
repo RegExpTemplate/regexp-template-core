@@ -142,6 +142,14 @@ class TemplateNode {
     this._parents = null;
 
     /**
+     * Object that maps children' template
+     * index to they position in
+     * this node's body
+     * @type {Object<number, number>}
+     */
+    this._children = null;
+
+    /**
      * Stores all variables' positions
      * in the node.
      * @type {VarIndexMap}
@@ -152,12 +160,26 @@ class TemplateNode {
 
   /**
    * Adds elements or nodes to the node's body.
+   * Also keeps track of the children nodes positions
    * @param {...TemplateInternal} elements
    */
   add(elements) {
-    this._body.push(...arguments);
-  }
+    for (const element of arguments) {
 
+      // if the element is a TemplateNode
+      // then map its position in this._children
+      if (element instanceof TemplateNode) {
+        // init children object if necessary
+        if (!this._children) {
+          this._children = {};
+        }
+
+        this._children[element._index] = this._body.length;
+      }
+
+      this._body.push(element);
+    }
+  }
 
   /**
    * Maps all variables in the node
