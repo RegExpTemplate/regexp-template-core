@@ -141,7 +141,7 @@ class TemplateNode {
    * Adds elements or nodes to the node's body.
    * @param {...TemplateInternal} elements
    */
-  add() {
+  add(elements) {
     this._body.push(...arguments);
   }
 
