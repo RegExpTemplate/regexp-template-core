@@ -212,6 +212,9 @@ class TemplateNode {
    * an array with all the chindren nodes
    */
   getParents(templateStack) {
+    if (!this._parents) {
+      return [];
+    }
     return this._parents.map(index => templateStack[index]);
   }
 
