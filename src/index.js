@@ -9,6 +9,9 @@
  * @typedef {TemplateElement|TemplateNode} TemplateInternal
  */
 
+/**
+ * @typedef {Object<string, number[]>} VarIndexMap
+ */
 
 
 /**
@@ -77,6 +80,8 @@ function processRegExp(regexp, templateStack, parents) {
     templateStack.push(node);
     node._parents = parents;
 
+    node.mapVariables();
+
     return node;
   }
 
@@ -136,6 +141,13 @@ class TemplateNode {
      */
     this._parents = null;
 
+    /**
+     * Stores all variables' positions
+     * in the node.
+     * @type {VarIndexMap}
+     */
+    this._vars = null;
+
   }
 
   /**
@@ -144,6 +156,29 @@ class TemplateNode {
    */
   add(elements) {
     this._body.push(...arguments);
+  }
+
+
+  /**
+   * Maps all variables in the node
+   * into they positions in the node's body
+   */
+  mapVariables() {
+    /**
+     * @type {VarIndexMap}
+     */
+    const vars = {};
+
+    for (let i = 1; i < this._body.length; i += 2) {
+      const escapedVar = ">" + this._body[i];
+      if (escapedVar in vars) {
+        vars[escapedVar].push(i);
+      } else {
+        vars[escapedVar] = [i];
+      }
+    }
+
+    this._vars = vars;
   }
 
   /**
