@@ -204,6 +204,16 @@ class TemplateNode {
   }
 
   /**
+   * @param {TemplateNode[]} templateStack
+   *
+   * @returns {TemplateNode[]}
+   * an array with all the chindren nodes
+   */
+  getParents(templateStack) {
+    return this._parents.map(index => templateStack[index]);
+  }
+
+  /**
    * Compiles all the content of the node to a string.
    * @param {*} compiledNodes
    * @returns {string} the compiled string.
