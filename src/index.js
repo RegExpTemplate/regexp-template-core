@@ -10,7 +10,7 @@
  */
 
 /**
- * @typedef {Object<string, number[]>} VarIndexMap
+ * @typedef {Object<string, Set<number>} VarIndexMap
  */
 
 
@@ -194,9 +194,11 @@ class TemplateNode {
     for (let i = 1; i < this._body.length; i += 2) {
       const escapedVar = ">" + this._body[i];
       if (escapedVar in vars) {
-        vars[escapedVar].push(i);
+        vars[escapedVar].add(i);
       } else {
-        vars[escapedVar] = [i];
+        const varSet = new Set();
+        varSet.add(i);
+        vars[escapedVar] = varSet;
       }
     }
 
