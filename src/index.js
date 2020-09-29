@@ -219,6 +219,41 @@ class TemplateNode {
   }
 
   /**
+   *
+   * @param {TemplateNode[]} templateStack 
+   */
+  propagateVars(templateStack) {
+
+    for (const parent of this.getParents(templateStack)) {
+      const selfVarNames = Object.getOwnPropertyNames(this._vars);
+
+      if (selfVarNames.length > 0 && !parent._vars) {
+        parent._vars = {};
+      }
+
+      /**
+       * After adding the new positions, this boolean
+       * will decide if current parent should propagate as well.
+       * It will happen if at least one variable is not defined.
+       * @type {boolean}
+       */
+      let shouldPropagate = false;
+      for (const varName of selfVarNames) {
+        if (!(varName in parent._vars)) {
+          parent._vars[varName] = new Set();
+          shouldPropagate = true;
+        }
+
+        parent._vars[varName].add(parent._children[this._index]);
+      }
+
+      if (shouldPropagate) {
+        parent.propagateVars(templateStack);
+      }
+    }
+  }
+
+  /**
    * Compiles all the content of the node to a string.
    * @param {*} compiledNodes
    * @returns {string} the compiled string.
@@ -263,6 +298,9 @@ class RegExpTemplate {
 
       rootNode.add(element);
 
+      if (element instanceof TemplateNode) {
+        element.propagateVars(this._templateStack);
+      }
     }
 
   }
