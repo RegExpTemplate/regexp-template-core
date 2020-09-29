@@ -258,10 +258,11 @@ class RegExpTemplate {
     this._templateStack = [rootNode];
 
 
-    for (const element of elements) {
-      const processedElement = processElement(element, this._templateStack, [0]);
+    for (const rawElement of elements) {
+      const element = processElement(rawElement, this._templateStack, [0]);
 
-      rootNode.add(processedElement);
+      rootNode.add(element);
+
     }
 
   }
