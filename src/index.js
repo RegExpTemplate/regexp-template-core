@@ -10,7 +10,7 @@
  */
 
 /**
- * @typedef {Object<string, Set<number>} VarIndexMap
+ * @typedef {Object<string, Set<number>>} VarIndexMap
  */
 
 
