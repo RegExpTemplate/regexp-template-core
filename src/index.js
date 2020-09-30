@@ -126,9 +126,8 @@ class TemplateNode {
     this._body = [];
 
     /**
-     * array of indexes of the parent
-     * nodes on the templateStack
-     * @type {number[]}
+     * Set with all the parent nodes
+     * @type {Set<TemplateNode>}
      */
     this._parents = null;
 
@@ -197,25 +196,12 @@ class TemplateNode {
   }
 
   /**
-   * @param {TemplateNode[]} templateStack
-   *
-   * @returns {TemplateNode[]}
-   * an array with all the chindren nodes
-   */
-  getParents(templateStack) {
-    if (!this._parents) {
-      return [];
-    }
-    return this._parents.map(index => templateStack[index]);
-  }
-
-  /**
    *
    * @param {TemplateNode[]} templateStack 
    */
   propagateVars(templateStack) {
 
-    for (const parent of this.getParents(templateStack)) {
+    for (const parent of this._parents) {
       const selfVarNames = Object.getOwnPropertyNames(this._vars);
 
       if (selfVarNames.length > 0 && !parent._vars) {
@@ -291,7 +277,8 @@ class RegExpTemplate {
 
       // if the new element is a new node
       if (element instanceof TemplateNode) {
-        element._parents = [0];
+        element._parents = new Set();
+        element._parents.add(rootNode);
 
         element.mapVariables();
 
