@@ -13,6 +13,9 @@
  * @typedef {Object<string, Set<number>>} VarIndexMap
  */
 
+ /**
+  * @typedef {Map<TemplateNode, Set<number>>} ChildrenIndexMap
+  */
 
 /**
  * !!! internal helper function !!!
@@ -132,12 +135,11 @@ class TemplateNode {
     this._parents = null;
 
     /**
-     * Object that maps children' template
-     * index to they position in
-     * this node's body
-     * @type {Object<number, number>}
+     * Maps of children to they positions
+     * in this node's body.
+     * @type {ChildrenIndexMap}
      */
-    this._children = null;
+    this._children = new Map();
 
     /**
      * Stores all variables' positions
@@ -155,16 +157,19 @@ class TemplateNode {
    */
   add(elements) {
     for (const element of arguments) {
-
       // if the element is a TemplateNode
       // then map its position in this._children
       if (element instanceof TemplateNode) {
-        // init children object if necessary
-        if (!this._children) {
-          this._children = {};
+
+        // init Set if necessary for element in
+        // this node's children map.
+        let childMap = this._children.get(element);
+        if (!childMap) {
+          childMap = new Set();
+          this._children.set(element, childMap);
         }
 
-        this._children[element._index] = this._body.length;
+        childMap.add(this._body.length);
       }
 
       this._body.push(element);
