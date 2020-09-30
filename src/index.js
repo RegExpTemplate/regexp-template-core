@@ -196,10 +196,12 @@ class TemplateNode {
   }
 
   /**
-   *
-   * @param {TemplateNode[]} templateStack 
+   * Propagates the vars of the node
+   * to all the nodes above.
    */
-  propagateVars(templateStack) {
+  propagateVars() {
+    // stop if is the root node
+    if (!this._parents) return;
 
     for (const parent of this._parents) {
       const selfVarNames = Object.getOwnPropertyNames(this._vars);
@@ -225,7 +227,7 @@ class TemplateNode {
       }
 
       if (shouldPropagate) {
-        parent.propagateVars(templateStack);
+        parent.propagateVars();
       }
     }
   }
@@ -282,7 +284,7 @@ class RegExpTemplate {
 
         element.mapVariables();
 
-        element.propagateVars(this._templateStack);
+        element.propagateVars();
       }
     }
 
