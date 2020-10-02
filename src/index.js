@@ -365,6 +365,20 @@ class RegExpTemplate {
         // replace var with the processed value
         this._templateStack[0].replaceVar(varName, varValue, varIndexes);
 
+        if (varValue instanceof TemplateNode) {
+
+          // init new node's "parents" and
+          // map its positions in parents' "children"
+          varValue._parents = new Set();
+          varIndexes.forEach((indexSet, parent) => {
+            varValue._parents.add(parent);
+            parent._children.set(varValue, indexSet);
+          });
+
+          varValue.mapVariables();
+          varValue.propagateVars();
+        }
+
       }
     }
 
