@@ -255,15 +255,28 @@ class TemplateNode {
    * @see RegExpTemplate.prototype.applyVars
    */
   replaceVar(varName, varValue, varIndexes) {
+    let currentNodeVarIndexes = varIndexes.get(this);
+    if (!currentNodeVarIndexes) {
+      currentNodeVarIndexes = new Set();
+    }
 
     this._vars[">" + varName].forEach(index => {
       const element = this._body[index];
       if (element instanceof TemplateNode) {
         element.replaceVar(varName, varValue, varIndexes);
       } else {
+        currentNodeVarIndexes.add(index);
         this._body[index] = varValue;
       }
     });
+
+    // only add the node to varIndexes if the
+    // variable index points at least to one leave.
+    // this will garanty that all the keys are parents
+    // of the generated node (if generated) to replace.
+    if (currentNodeVarIndexes.size > 0) {
+      varIndexes.set(this, currentNodeVarIndexes);
+    }
 
     delete this._vars[">" + varName];
   }
@@ -341,6 +354,10 @@ class RegExpTemplate {
         const varValue = processElement(vars[varName], this._templateStack);
 
         /**
+         * If the varValue creates a new node, this
+         * map will register the positions of the old var
+         * positions to setup later the "parents" in the new node
+         * and to add the new node to all its parents' "children"
          * @type {Map<TemplateNode, Set<number>>}
          */
         const varIndexes = new Map();
