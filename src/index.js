@@ -228,7 +228,11 @@ class TemplateNode {
           shouldPropagate = true;
         }
 
-        parent._vars[varName].add(parent._children[this._index]);
+        // the parent var positions are the ones there before
+        // plus the positions of the child node propagating
+        parent._children.get(this).forEach(index => {
+          parent._vars[varName].add(index);
+        });
       }
 
       if (shouldPropagate) {
