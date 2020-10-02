@@ -241,6 +241,34 @@ class TemplateNode {
     }
   }
 
+
+  /**
+   * Replaces the variable with the varValue given
+   * for the current node and all its subnodes.
+   * When replaced, the variable will be removed
+   * from the current node and in its subnodes.
+   *
+   * @param {*} varName name of the variable to replace
+   * @param {*} varValue value to replace in the variable
+   * @param {Map<TemplateNode, Set<number>>} varIndexes
+   * indexes of the leaves of the variable
+   * @see RegExpTemplate.prototype.applyVars
+   */
+  replaceVar(varName, varValue, varIndexes) {
+
+    this._vars[">" + varName].forEach(index => {
+      const element = this._body[index];
+      if (element instanceof TemplateNode) {
+        element.replaceVar(varName, varValue, varIndexes);
+      } else {
+        this._body[index] = varValue;
+      }
+    });
+
+    delete this._vars[">" + varName];
+  }
+
+
   /**
    * Compiles all the content of the node to a string.
    * @param {*} compiledNodes
@@ -298,6 +326,34 @@ class RegExpTemplate {
     }
 
   }
+
+  /**
+   * Replace the key variables in template,
+   * with the values passed.
+   * @param {*} vars variables to replace
+   * @returns {RegExpTemplate} returns the template it self for chaining.
+   */
+  applyVars(vars) {
+    {
+      for (const varName of Object.getOwnPropertyNames(vars)) {
+
+        // process var value
+        const varValue = processElement(vars[varName], this._templateStack);
+
+        /**
+         * @type {Map<TemplateNode, Set<number>>}
+         */
+        const varIndexes = new Map();
+
+        // replace var with the processed value
+        this._templateStack[0].replaceVar(varName, varValue, varIndexes);
+
+      }
+    }
+
+    return this;
+  }
+
 
   /**
    * Compiles all the template elements to a single RegExp.
