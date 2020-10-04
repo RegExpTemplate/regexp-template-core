@@ -265,10 +265,12 @@ class TemplateNode {
       alreadyVisitedNodes.add(this);
     }
 
-    let currentNodeVarIndexes = varIndexes.get(this);
-    if (!currentNodeVarIndexes) {
-      currentNodeVarIndexes = new Set();
-    }
+    /**
+     * Set to add the indexes of leaves (if exist)
+     * of the variable.
+     * @type {Set<number>}
+     */
+    let currentNodeVarIndexes = new Set();
 
     this._vars[">" + varName].forEach(index => {
       const element = this._body[index];
