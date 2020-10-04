@@ -250,11 +250,21 @@ class TemplateNode {
    *
    * @param {*} varName name of the variable to replace
    * @param {*} varValue value to replace in the variable
+   * @param {Set<TemplateNode>} alreadyVisitedNodes set to keep
+   * track of the nodes that the replaceVar was already called
    * @param {Map<TemplateNode, Set<number>>} varIndexes
    * indexes of the leaves of the variable
    * @see RegExpTemplate.prototype.applyVars
    */
-  replaceVar(varName, varValue, varIndexes) {
+  replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes) {
+    // if the variable was already replaced
+    // for this node then ignore it
+    if (alreadyVisitedNodes.has(this)) {
+      return;
+    } else {
+      alreadyVisitedNodes.add(this);
+    }
+
     let currentNodeVarIndexes = varIndexes.get(this);
     if (!currentNodeVarIndexes) {
       currentNodeVarIndexes = new Set();
@@ -263,7 +273,7 @@ class TemplateNode {
     this._vars[">" + varName].forEach(index => {
       const element = this._body[index];
       if (element instanceof TemplateNode) {
-        element.replaceVar(varName, varValue, varIndexes);
+        element.replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
       } else {
         currentNodeVarIndexes.add(index);
         this._body[index] = varValue;
@@ -362,8 +372,15 @@ class RegExpTemplate {
          */
         const varIndexes = new Map();
 
+        /**
+         * keeps track of the nodes that
+         * already have been called replaceVar
+         * @type {Set<TemplateNode>}
+         */
+        const alreadyVisitedNodes = new Set();
+
         // replace var with the processed value
-        this._templateStack[0].replaceVar(varName, varValue, varIndexes);
+        this._templateStack[0].replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
 
         if (varValue instanceof TemplateNode) {
 
