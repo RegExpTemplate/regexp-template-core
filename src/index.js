@@ -307,6 +307,9 @@ class TemplateNode {
       if (currentElement instanceof RegExpTemplate) {
         currentElement = currentElement.compile();
       }
+      else if (currentElement instanceof TemplateNode) {
+        currentElement = compiledNodes[currentElement._index];
+      }
 
       result += currentElement;
     }
@@ -345,7 +348,6 @@ class RegExpTemplate {
         element._parents.add(rootNode);
 
         element.mapVariables();
-
         element.propagateVars();
       }
     }
@@ -415,9 +417,18 @@ class RegExpTemplate {
      */
     const compiledNodes = new Array(this._templateStack.length);
 
+    let unbindedVars = Object.getOwnPropertyNames(this._templateStack[0]._vars);
+    if (unbindedVars.length > 0) {
+      const error = TypeError("Cannot compile while all defined variables aren't binded to a value");
+      error["vars"] = unbindedVars.map(a => a.substr(1));
+      throw error;
+    }
 
-    const finalCompilationString = this._templateStack[0].compile(compiledNodes);
-    return new RegExp(finalCompilationString);
+    for (let i = this._templateStack.length - 1; i >= 0; i--) {
+      compiledNodes[i] = this._templateStack[i].compile(compiledNodes);
+    }
+
+    return new RegExp(compiledNodes[0]);
   }
 
 }
