@@ -417,11 +417,13 @@ class RegExpTemplate {
      */
     const compiledNodes = new Array(this._templateStack.length);
 
-    let unbindedVars = Object.getOwnPropertyNames(this._templateStack[0]._vars);
-    if (unbindedVars.length > 0) {
-      const error = TypeError("Cannot compile while all defined variables aren't binded to a value");
-      error["vars"] = unbindedVars.map(a => a.substr(1));
-      throw error;
+    if (this._templateStack[0]._vars) {
+      let unbindedVars = Object.getOwnPropertyNames(this._templateStack[0]._vars);
+      if (unbindedVars.length > 0) {
+        const error = TypeError("Cannot compile while all defined variables aren't binded to a value");
+        error["vars"] = unbindedVars.map(a => a.substr(1));
+        throw error;
+      }
     }
 
     for (let i = this._templateStack.length - 1; i >= 0; i--) {
