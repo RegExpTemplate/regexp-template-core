@@ -59,3 +59,29 @@ function assertEquals(a,b) {
   assertEquals("\\\\", getRegExpPattern(/\\/));
 }
 
+// test escapeString
+{
+  assertEquals(new RegExp(escapeString("+")).toString(), /\+/.toString());
+  assertEquals(new RegExp(escapeString("\\+")).toString(), /\\\+/.toString());
+  assertEquals(new RegExp(escapeString("a+b")).toString(), /a\+b/.toString());
+
+  assertEquals(new RegExp(escapeString("?")).toString(), /\?/.toString());
+  assertEquals(new RegExp(escapeString("\\?")).toString(), /\\\?/.toString());
+
+  assertEquals(new RegExp(escapeString("x(?=y)")).toString(), /x\(\?=y\)/.toString());
+  assertEquals(new RegExp(escapeString("x(?!y)")).toString(), /x\(\?!y\)/.toString());
+  assertEquals(new RegExp(escapeString("(?<=y)x")).toString(), /\(\?<=y\)x/.toString());
+  assertEquals(new RegExp(escapeString("(?<!y)x")).toString(), /\(\?<!y\)x/.toString());
+
+  assertEquals(new RegExp(escapeString("[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z]")).toString(), /\[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z\]/.toString());
+
+
+  assertEquals(new RegExp(escapeString("/")).toString(), /\//.toString());
+
+  assertEquals(new RegExp(escapeString("\\")).toString(), /\\/.toString());
+
+  // string especial chars should be interpreted
+  assertEquals(escapeString("\n"), "\n");
+
+}
+

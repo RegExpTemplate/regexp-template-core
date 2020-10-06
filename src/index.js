@@ -51,6 +51,30 @@ function splitVars(regExpPattern) {
   return regExpPattern.split( /\\V\s*\{\s*([a-zA-Z]\w*)\s*\}/g );
 }
 
+
+/**
+ * !!! internal function !!!
+ * Escape all especial chars
+ * i.e. all chars should be literals.
+ * note: special string chars such
+ * as \n are already interpreted before
+ * this function is called, and for
+ * that reason, not escaped.
+ *
+ * @param {string} str input string
+ * @returns {string} escaped string
+ */
+function escapeString(str) {
+  return str
+
+  // escape back slash
+  .replace(/\\/g, '\\\\')
+
+  // escape special chars
+  .replace(/[+*?.\^$(){}\[\]\|]/g, (char) => '\\' + char );
+
+}
+
 /**
  * !!! internal helper function !!!
  * Process regexp for template.
@@ -104,7 +128,7 @@ function processElement(element, templateStack) {
     return element;
   }
   else {
-    throw new TypeError("Strings not implemented yet");
+    return escapeString("" + element);
   }
 }
 
