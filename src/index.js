@@ -329,7 +329,7 @@ class TemplateNode {
       let currentElement = this._body[i];
 
       if (currentElement instanceof RegExpTemplate) {
-        currentElement = currentElement.compile();
+        currentElement = getRegExpPattern(currentElement.compile());
       }
       else if (currentElement instanceof TemplateNode) {
         currentElement = compiledNodes[currentElement._index];
