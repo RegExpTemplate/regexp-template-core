@@ -1,0 +1,27 @@
+{
+  "name": "regexp-template",
+  "version": "1.0.0-alpha",
+  "description": "A JavaScript library to generate complex regular expressions more easily.",
+  "author": "André Jesus Brito",
+  "license": "MIT",
+  "keywords": [
+    "regexp",
+    "regexp join",
+    "regexp variables",
+    "regexp placeholder",
+    "javascript",
+    "javascript library"
+  ],
+  "main": "dist/regexp-template.js",
+  "directories": {
+    "test": "tests",
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreJesusBrito/RegExpTemplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AndreJesusBrito/RegExpTemplate/issues"
+  }
+}
