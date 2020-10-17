@@ -1,5 +1,5 @@
 //@ts-check
-"use strict";
+'use strict';
 
 /**
  * @typedef {string|RegExp|RegExpTemplate} TemplateElement
@@ -13,9 +13,9 @@
  * @typedef {Object<string, Set<number>>} VarIndexMap
  */
 
- /**
-  * @typedef {Map<TemplateNode, Set<number>>} ChildrenIndexMap
-  */
+/**
+ * @typedef {Map<TemplateNode, Set<number>>} ChildrenIndexMap
+ */
 
 /**
  * !!! internal helper function !!!
@@ -71,7 +71,7 @@ function escapeString(str) {
   .replace(/\\/g, '\\\\')
 
   // escape special chars
-  .replace(/[+*?.\^$(){}\[\]\|]/g, (char) => '\\' + char );
+  .replace(/[+*?.^$(){}[\]|]/g, (char) => '\\' + char );
 
 }
 
@@ -179,7 +179,7 @@ class TemplateNode {
    * Also keeps track of the children nodes positions
    * @param {...TemplateInternal} elements
    */
-  add(elements) {
+  add() {
     for (const element of arguments) {
       // if the element is a TemplateNode
       // then map its position in this._children
