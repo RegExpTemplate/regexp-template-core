@@ -1,6 +1,6 @@
 {
   "name": "@regexp-template/core",
-  "version": "1.0.0-alpha",
+  "version": "1.1.1-alpha",
   "description": "A JavaScript library to generate complex regular expressions more easily.",
   "author": "André Jesus Brito",
   "license": "MIT",
