@@ -4,7 +4,7 @@ A JavaScript library to generate complex regular expressions more easily.
 <!-- Badges -->
 [![npm version](https://badge.fury.io/js/%40regexp-template%2Fcore.svg)](https://badge.fury.io/js/%40regexp-template%2Fcore)
 [![](https://data.jsdelivr.com/v1/package/npm/@regexp-template/core/badge)](https://www.jsdelivr.com/package/npm/@regexp-template/core)
-<a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg" alt="Conventional Commits"></a>
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 <!-- End Badges -->
 
 
@@ -24,7 +24,7 @@ or via _npm_:
 npm i @regexp-template/core
 ```
 
-Using the script tag the RegExpTemplate class becomes avaliable on the global scope.
+Using the script tag the RegExpTemplate class becomes available on the global scope.
 
 On _Node.js_ can be required using:
 ```JS
@@ -34,12 +34,12 @@ const RegExpTemplate = require('@regexp-template/core');
 ### Hello world example
 Lets start with a simple example: concatenation of two regular expressions, `/hello/` and `/world/`.
 
-We first create a RegExpTemplate instance with our regular expressions as arguments
+We first create a RegExpTemplate instance with our regular expressions as arguments:
 ```JS
 var hwTemplate = new RegExpTemplate(/hello/, /world/);
 ```
 
-then we can compile our template to an regexp
+then we can compile our template to a RegExp:
 ```JS
 var re = hwTemplate.compile();
 // outputs /helloworld/
@@ -47,7 +47,7 @@ var re = hwTemplate.compile();
 
 The compile method joins the two regular expressions into a new one.
 
-In this case we only passed two regular expressions but you can pass as much [template elements (see below)](#Template-Elements) as you want.
+In this case we only passed two regular expressions but you can pass as many [template elements (see below)](#Template-Elements) as you want.
 
 
 
@@ -56,7 +56,7 @@ The template is constructed using pieces called _elements_.
 In the hello world example above, `/hello/` and `/world/` are two _elements_ of that template.
 
 Template _elements_ have 4 types:
-- RegExp - used to add regular expression segments to the template. Also allow to use [template variables](#Template-Variables).
+- RegExp - used to add regular expression segments to the template. Also allow use of [template variables](#Template-Variables).
 - string - all characters are interpreted as literal characters (except especials of strings like `\n`).
 
 - RegExpTemplate - this allows templates to be used inside another templates. See the [subtemplates section](#Subtemplates).
@@ -127,19 +127,19 @@ myTemplate.compile();
 // outputs /dog is the same as dog but not cat/
 ```
 
-You don't need to set variables at once. you can do something like
+You don't need to set variables at once. you can do something like:
 ```JS
 myTemplate.applyVars({foo: "dog"});
 myTemplate.applyVars({bar: "cat"});
 ```
-or in chain
+or in chain:
 ```js
 myTemplate
 .applyVars({foo: "dog"})
 .applyVars({bar: "cat"});
 ```
 
-keep in mind however that all variables must be assigned before compiling the template
+keep in mind however that all variables must be assigned before compiling the template:
 ```JS
 const myTemplate = new RegExpTemplate(
   /\V{ myVar } was not assigned/
