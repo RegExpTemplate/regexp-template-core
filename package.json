@@ -35,9 +35,6 @@
     "build": "grunt",
     "lint": "grunt eslint"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
