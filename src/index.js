@@ -447,11 +447,9 @@ class RegExpTemplate {
     const compiledNodes = new Array(this._templateStack.length);
 
     if (this._templateStack[0]._vars) {
-      let unbindedVars = Object.getOwnPropertyNames(this._templateStack[0]._vars);
-      if (unbindedVars.length > 0) {
-        const error = TypeError("Cannot compile while all defined variables aren't binded to a value");
-        error["vars"] = unbindedVars.map(a => a.substr(1));
-        throw error;
+      let unassignedVars = Object.getOwnPropertyNames(this._templateStack[0]._vars);
+      if (unassignedVars.length > 0) {
+        throw TypeError("Cannot compile due to unassigned variables.");
       }
     }
 
