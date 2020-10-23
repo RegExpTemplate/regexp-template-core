@@ -430,6 +430,11 @@ class RegExpTemplate {
     return this;
   }
 
+  get unassignedVars() {
+    return Object
+    .getOwnPropertyNames(this._templateStack[0]._vars)
+    .map(v => v.substring(1)); // remove escape char
+  }
 
   /**
    * Compiles all the template elements to a single RegExp.
