@@ -323,7 +323,7 @@ class TemplateNode {
    * @param {*} compiledNodes
    * @returns {string} the compiled string.
    */
-  compile(compiledNodes) {
+  compileNode(compiledNodes) {
     let result = "";
     for (let i = 0; i < this._body.length; i++) {
       let currentElement = this._body[i];
@@ -454,7 +454,7 @@ class RegExpTemplate {
     }
 
     for (let i = this._templateStack.length - 1; i >= 0; i--) {
-      compiledNodes[i] = this._templateStack[i].compile(compiledNodes);
+      compiledNodes[i] = this._templateStack[i].compileNode(compiledNodes);
     }
 
     return new RegExp(compiledNodes[0]);
