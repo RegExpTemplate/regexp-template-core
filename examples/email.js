@@ -4,7 +4,7 @@
  * note: This is just for demonstration and
  * might not be ready to be used.
  *
- * Authors: André Jesus Brito
+ * Authors: Gildson Bezerra da Silva
  */
 
 
@@ -23,7 +23,7 @@ const emailTemplate = new RegExpTemplate(
   // username part as a regular expression
   usernameRegExp,
 
-  // at
+  // at symbol
   /@/,
 
   // server mail domain part as a regular expression
