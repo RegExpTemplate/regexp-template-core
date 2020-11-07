@@ -385,46 +385,44 @@ class RegExpTemplate {
    * @returns {RegExpTemplate} returns the template it self for chaining.
    */
   applyVars(vars) {
-    {
-      for (const varName of Object.getOwnPropertyNames(vars)) {
+    for (const varName of Object.getOwnPropertyNames(vars)) {
 
-        // process var value
-        const varValue = processElement(vars[varName], this._templateStack);
+      // process var value
+      const varValue = processElement(vars[varName], this._templateStack);
 
-        /**
-         * If the varValue creates a new node, this
-         * map will register the positions of the old var
-         * positions to setup later the "parents" in the new node
-         * and to add the new node to all its parents' "children"
-         * @type {Map<TemplateNode, Set<number>>}
-         */
-        const varIndexes = new Map();
+      /**
+       * If the varValue creates a new node, this
+       * map will register the positions of the old var
+       * positions to setup later the "parents" in the new node
+       * and to add the new node to all its parents' "children"
+       * @type {Map<TemplateNode, Set<number>>}
+       */
+      const varIndexes = new Map();
 
-        /**
-         * keeps track of the nodes that
-         * already have been called replaceVar
-         * @type {Set<TemplateNode>}
-         */
-        const alreadyVisitedNodes = new Set();
+      /**
+       * keeps track of the nodes that
+       * already have been called replaceVar
+       * @type {Set<TemplateNode>}
+       */
+      const alreadyVisitedNodes = new Set();
 
-        // replace var with the processed value
-        this._templateStack[0].replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
+      // replace var with the processed value
+      this._templateStack[0].replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
 
-        if (varValue instanceof TemplateNode) {
+      if (varValue instanceof TemplateNode) {
 
-          // init new node's "parents" and
-          // map its positions in parents' "children"
-          varValue._parents = new Set();
-          varIndexes.forEach((indexSet, parent) => {
-            varValue._parents.add(parent);
-            parent._children.set(varValue, indexSet);
-          });
+        // init new node's "parents" and
+        // map its positions in parents' "children"
+        varValue._parents = new Set();
+        varIndexes.forEach((indexSet, parent) => {
+          varValue._parents.add(parent);
+          parent._children.set(varValue, indexSet);
+        });
 
-          varValue.mapVariables();
-          varValue.propagateVars();
-        }
-
+        varValue.mapVariables();
+        varValue.propagateVars();
       }
+
     }
 
     return this;
