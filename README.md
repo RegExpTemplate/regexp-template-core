@@ -10,6 +10,10 @@ A JavaScript library to generate complex regular expressions more easily.
 
 > :warning: **WARNING:** This library still under development and should not be used in production!
 
+## Contributing
+Want to help? Found a bug or have any suggestion? Find how to contribute in the [CONTRIBUTING.md file](https://github.com/AndreJesusBrito/RegExpTemplate/CONTRIBUTING.md).
+
+
 
 ## Getting Started
 
@@ -208,15 +212,6 @@ When the parent template compile method is called the _subtemplate_ compile meth
 > This feature is not implemented yet.
 
 The RegExpTemplate provides an API that allow you to make your own [template elements](#Template-Elements).
-
-
-
-## Contributing
-This project is still in very early stages and its not ready to receive pull requests yet.
-
-However you can still help by playing with the library and try to find possible bugs in it. If you do, please let me know by adding in the issues.
-
-Also, sugestions are welcome :)
 
 
 
