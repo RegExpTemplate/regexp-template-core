@@ -48,7 +48,7 @@ function getRegExpPattern(regexp) {
  * The odd positions contain the variables' names.
  */
 function splitVars(regExpPattern) {
-  return regExpPattern.split( /\\V\s*\{\s*([a-zA-Z]\w*)\s*\}/g );
+  return regExpPattern.split( /\\[Vv][Aa][Rr]\s*\{\s*([a-zA-Z]\w*)\s*\}/g );
 }
 
 

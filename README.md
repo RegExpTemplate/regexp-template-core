@@ -74,15 +74,15 @@ Any other type passed to the template gets converted to a string.
 Template Variables let you introduce new [template elements](#Template-Elements) inside of regular expressions.
 
 ### Declaring variables
-Template variables can be declared by using the notation `\V{varname}` inside regular expressions, where the `varname` is the name of the variable.
+Template variables can be declared by using the notation `\VAR{varname}` inside regular expressions, where the `varname` is the name of the variable.
 
 
-Note that in `\V` the `V` MUST be uppercase. `'\v'` is already used in regular expressions and strings as vertical tab.
+Note that in `\VAR` doesn't need to be uppercase. `'\VAR'`, `\Var` or `\var` all work the same way.
 
 In the code below a template is created and a variable called `myVar` is defined.
 
 ```JS
-new RegExpTemplate(/\V{ myVar }/);
+new RegExpTemplate(/\VAR{ myVar }/);
 ```
 
 > Note: whitespace can be used inside the curly braces.
@@ -91,8 +91,8 @@ new RegExpTemplate(/\V{ myVar }/);
 variables are unique, any reference for `varname` refers to the same variable.
 ```JS
 new RegExpTemplate(
-  /\V{ foo } is the/,
-  /same as \V{ foo } but not \V{ bar }/
+  /\VAR{ foo } is the/,
+  /same as \VAR{ foo } but not \VAR{ bar }/
 );
 ```
 
@@ -103,7 +103,7 @@ new RegExpTemplate(
 Once defined a variable can then be assigned. This is done using the `applyVars` method.
 
 ```JS
-const myTemplate = new RegExpTemplate(/\V{ myVar }/);
+const myTemplate = new RegExpTemplate(/\VAR{ myVar }/);
 
 myTemplate.applyVars({
   myVar: "myValue"
@@ -118,8 +118,8 @@ After the method is called then all references of the variables passed are going
 ```JS
 const myTemplate = 
 new RegExpTemplate(
-  /\V{ foo } is the/,
-  /same as \V{ foo } but not \V{ bar }/
+  /\VAR{ foo } is the/,
+  /same as \VAR{ foo } but not \VAR{ bar }/
 );
 
 myTemplate.applyVars({
@@ -146,7 +146,7 @@ myTemplate
 keep in mind however that all variables must be assigned before compiling the template:
 ```JS
 const myTemplate = new RegExpTemplate(
-  /\V{ myVar } was not assigned/
+  /\VAR{ myVar } was not assigned/
 );
 
 myTemplate.compile();
@@ -158,11 +158,11 @@ If you assign a value that contains new variables, that variables will be define
 
 ```JS
 const myTemplate = new RegExpTemplate(
-  /\V{ oldVar }/
+  /\VAR{ oldVar }/
 );
 
 myTemplate
-.applyVars({oldVar: /\(\V{ newVar }\)/})
+.applyVars({oldVar: /\(\VAR{ newVar }\)/})
 .applyVars({newVar: '2'});
 ```
 

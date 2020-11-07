@@ -23,10 +23,10 @@ const queryTemplate = new RegExpTemplate(
   '?',
 
   // first param (required)
-  /(\V{ param })/,
+  /(\VAR{ param })/,
 
   // more params (optional)
-  /(&(\V{ param }))*/,
+  /(&(\VAR{ param }))*/,
 
 ).applyVars({
   param: /[a-zA-Z0-9%]+=[a-zA-Z0-9%]+/,
@@ -40,16 +40,16 @@ const urlTemplate = new RegExpTemplate(
   /^/,
 
   // protocol part (optional) regular expression via applyVars
-  /(\V{ protocolSection }\:\/\/)?/,
+  /(\VAR{ protocolSection }\:\/\/)?/,
 
   // domain part (required) as a regular expression
   domainRegExp,
 
   // path part (optional) as other regular expression
-  /(\V{ pathRegExp })?/,
+  /(\VAR{ pathRegExp })?/,
 
   // query part (optional) as a subtemplate via applyVars
-  /(\V{ queryTemplate })?/,
+  /(\VAR{ queryTemplate })?/,
 
   // force end
   /$/
