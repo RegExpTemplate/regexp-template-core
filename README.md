@@ -11,7 +11,7 @@ A JavaScript library to generate complex regular expressions more easily.
 > :warning: **WARNING:** This library still under development and should not be used in production!
 
 ## Contributing
-Want to help? Found a bug or have any suggestion? Find how to contribute in the [CONTRIBUTING.md file](https://github.com/AndreJesusBrito/RegExpTemplate/CONTRIBUTING.md).
+Want to help? Found a bug or have any suggestion? Find how to contribute in the [CONTRIBUTING.md file](https://github.com/RegExpTemplate/core/blob/master/CONTRIBUTING.md).
 
 
 
