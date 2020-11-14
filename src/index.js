@@ -204,7 +204,7 @@ class TemplateNode {
    * Maps all variables in the node
    * into they positions in the node's body
    */
-  mapVariables() {
+  mapVars() {
     /**
      * @type {VarIndexMap}
      */
@@ -371,7 +371,7 @@ class RegExpTemplate {
         element._parents = new Set();
         element._parents.add(rootNode);
 
-        element.mapVariables();
+        element.mapVars();
         element.propagateVars();
       }
     }
@@ -419,7 +419,7 @@ class RegExpTemplate {
           parent._children.set(varValue, indexSet);
         });
 
-        varValue.mapVariables();
+        varValue.mapVars();
         varValue.propagateVars();
       }
 
