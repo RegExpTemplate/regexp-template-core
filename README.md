@@ -61,7 +61,7 @@ In the hello world example above, `/hello/` and `/world/` are two _elements_ of 
 
 Template _elements_ have 4 types:
 - RegExp - used to add regular expression segments to the template. Also allow use of [template variables](#Template-Variables).
-- string - all characters are interpreted as literal characters (except especials of strings like `\n`).
+- string - all characters are interpreted as literal characters (except especials characters of strings like `\n`).
 
 - RegExpTemplate - this allows templates to be used inside another templates. See the [subtemplates section](#Subtemplates).
 - extension - a custom user defined class. See the [template extension section](#Template-Extensions) for more info.
@@ -88,7 +88,7 @@ new RegExpTemplate(/\VAR{ myVar }/);
 > Note: whitespace can be used inside the curly braces.
 
 
-variables are unique, any reference for `varname` refers to the same variable.
+variables are unique, any reference to `varname` refers to the same variable.
 ```JS
 new RegExpTemplate(
   /\VAR{ foo } is the/,
@@ -154,7 +154,7 @@ myTemplate.compile();
 ```
 
 ### New variable reference in assign.
-If you assign a value that contains new variables, that variables will be defined/referenced once the variable is applied.
+If you assign a value that contains new variables, that variable will be defined/referenced once the variable is applied.
 
 ```JS
 const myTemplate = new RegExpTemplate(
@@ -174,7 +174,7 @@ Once added to the template the new variable `newVar` is defined.
 
 Then the second `applyVars` replaces `newVar` with the string `'2'`.
 
-Since all variables (`oldVar` and ´newVar´) defined are assigned, the template can now be compiled.
+Since all variables (`oldVar` and `newVar`) defined are assigned, the template can now be compiled.
 ```JS
 myTemplate.compile();
 // outputs /(2)/
@@ -199,8 +199,8 @@ sumTemplate.compile();
 // outputs /\d+\.\d* \+ \d+\.\d*/
 ```
 
-This allows to split parts of a complex regular expression into smaller ones, making it more easy to read and edit.
-It also allows to reuse this smaller parts in different contexts that the part might be common e.q. the number template in the example above might be used in other contexts that not a sum.
+This allows you split parts of a complex regular expression into smaller ones, making it easier to read and edit.
+It also allows the reuse of these smaller parts in different contexts that might be common e.g. the number template in the example above might be used in other contexts than sum.
 
 The subtemplates are independent. The [template variables](#Template-Variables) assigned to the parent template will not propagate to the _subtemplate_.
 
@@ -211,7 +211,7 @@ When the parent template compile method is called the _subtemplate_ compile meth
 ## Template Extensions
 > This feature is not implemented yet.
 
-The RegExpTemplate provides an API that allow you to make your own [template elements](#Template-Elements).
+The RegExpTemplate provides an API that allows you to make your own [template elements](#Template-Elements).
 
 
 
