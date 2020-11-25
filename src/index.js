@@ -272,49 +272,65 @@ class TemplateNode {
    * When replaced, the variable will be removed
    * from the current node and in its subnodes.
    *
-   * @param {*} varName name of the variable to replace
-   * @param {*} varValue value to replace in the variable
+   * @param {{[key:string]: TemplateInternal}} vars object mapping
+   * vars to the elements to replace
    * @param {Set<TemplateNode>} alreadyVisitedNodes set to keep
    * track of the nodes that the replaceVar was already called
-   * @param {Map<TemplateNode, Set<number>>} varIndexes
-   * indexes of the leaves of the variable
+   * @param {{[varName: string]: Map<TemplateNode, Set<number>>}} varsIndexes
+   * object that maps the variable names to the variable indexes for each TemplateNode
    * @see RegExpTemplate.prototype.applyVars
    */
-  replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes) {
-    // if the variable was already replaced
-    // for this node then ignore it
+  replaceVars(vars, alreadyVisitedNodes, varsIndexes) {
+    // if the variables were already replaced
+    // in this node then ignore it
     if (alreadyVisitedNodes.has(this)) {
       return;
     } else {
       alreadyVisitedNodes.add(this);
     }
 
-    /**
-     * Set to add the indexes of leaves (if exist)
-     * of the variable.
-     * @type {Set<number>}
-     */
-    let currentNodeVarIndexes = new Set();
+    for (const varName of Object.getOwnPropertyNames(vars)) {
 
-    this._vars[">" + varName].forEach(index => {
-      const element = this._body[index];
-      if (element instanceof TemplateNode) {
-        element.replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
-      } else {
-        currentNodeVarIndexes.add(index);
-        this._body[index] = varValue;
+      const varIndexes = this._vars[">" + varName];
+
+      // ignore current var if
+      // is not defined in the current node
+      if (!varIndexes) continue;
+
+      /**
+       * Set to add the indexes of tree leaves (if any)
+       * of the current variable.
+       * @type {Set<number>}
+       */
+      const currentNodeLeaveVarIndexes = new Set();
+
+      varIndexes.forEach(index => {
+        const element = this._body[index];
+        if (element instanceof TemplateNode) {
+          element.replaceVars(vars, alreadyVisitedNodes, varsIndexes);
+        } else {
+          currentNodeLeaveVarIndexes.add(index);
+          this._body[index] = vars[varName];
+        }
+      });
+
+      /*
+       * only add the node to varIndexes if the
+       * variable index points at least to one leave.
+       * this will garanty that all the keys are parents
+       * of the generated node (if generated) to replace.
+       */
+      if (currentNodeLeaveVarIndexes.size > 0) {
+        if (!varsIndexes[">" + varName]) {
+          varsIndexes[">" + varName] = new Map();
+        }
+        varsIndexes[">" + varName].set(this, currentNodeLeaveVarIndexes);
       }
-    });
 
-    // only add the node to varIndexes if the
-    // variable index points at least to one leave.
-    // this will garanty that all the keys are parents
-    // of the generated node (if generated) to replace.
-    if (currentNodeVarIndexes.size > 0) {
-      varIndexes.set(this, currentNodeVarIndexes);
+      // remove var reference from the current node
+      delete this._vars[">" + varName];
     }
 
-    delete this._vars[">" + varName];
   }
 
 
@@ -385,31 +401,37 @@ class RegExpTemplate {
    * @returns {RegExpTemplate} returns the template it self for chaining.
    */
   applyVars(vars) {
+
+    // process all variables
     for (const varName of Object.getOwnPropertyNames(vars)) {
+      vars[varName] = processElement(vars[varName], this._templateStack);
+    }
 
-      // process var value
-      const varValue = processElement(vars[varName], this._templateStack);
+    /**
+     * keeps track of the nodes that
+     * already have been called replaceVar
+     * @type {Set<TemplateNode>}
+     */
+    const alreadyVisitedNodes = new Set();
 
-      /**
-       * If the varValue creates a new node, this
-       * map will register the positions of the old var
-       * positions to setup later the "parents" in the new node
-       * and to add the new node to all its parents' "children"
-       * @type {Map<TemplateNode, Set<number>>}
-       */
-      const varIndexes = new Map();
+    /**
+     * If the varValue creates a new node, this object
+     * map will register for each variable the positions of the old vars
+     * positions to setup later the "parents" in the new node
+     * and to add the new node to all its parents' "children"
+     * @type {{[varName: string]:Map<TemplateNode, Set<number>>}}
+     */
+    const varsIndexes = {};
 
-      /**
-       * keeps track of the nodes that
-       * already have been called replaceVar
-       * @type {Set<TemplateNode>}
-       */
-      const alreadyVisitedNodes = new Set();
+    // replace var with the processed value
+    this._templateStack[0].replaceVars(vars, alreadyVisitedNodes, varsIndexes);
 
-      // replace var with the processed value
-      this._templateStack[0].replaceVar(varName, varValue, alreadyVisitedNodes, varIndexes);
+
+    for (const varName of Object.getOwnPropertyNames(vars)) {
+      const varValue = vars[varName];
 
       if (varValue instanceof TemplateNode) {
+        const varIndexes = varsIndexes[">" + varName];
 
         // init new node's "parents" and
         // map its positions in parents' "children"
