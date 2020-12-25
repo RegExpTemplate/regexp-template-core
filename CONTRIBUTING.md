@@ -11,18 +11,18 @@ I want to:
 
 
 ## Reporting a bug
-You found a problem in this project. Please report in the [issues using this format](https://github.com/RegExpTemplate/core/issues/new?assignees=&labels=&template=bug_report.md&title=%5BBUG%5D).
+You found a problem in this project. Please report in the [issues using this format](https://github.com/RegExpTemplate/regexp-template-core/issues/new?assignees=&labels=&template=bug_report.md&title=%5BBUG%5D).
 
-Before reporting a bug however, please check [for bugs in the issues](https://github.com/RegExpTemplate/core/issues?q=is%3Aissue+label%3A%22bug%22) to make sure that the bug was not reported yet. This will avoid duplicates.
+Before reporting a bug however, please check [for bugs in the issues](https://github.com/RegExpTemplate/regexp-template-core/issues?q=is%3Aissue+label%3A%22bug%22) to make sure that the bug was not reported yet. This will avoid duplicates.
 
 If you also want to work on this bug, then add a comment to let us know.
 
 
 
 ## Making a suggestion
-Suggestions are always welcome. Keep in mind however that this is a core library. Only fundamental features should be implemented. All others should be implemented as [extensions](https://github.com/RegExpTemplate/core#Template-Extensions).
+Suggestions are always welcome. Keep in mind however that this is a core library. Only fundamental features should be implemented. All others should be implemented as [extensions](https://github.com/RegExpTemplate/regexp-template-core#Template-Extensions).
 
-If you think this is relevant to the core then please make your suggestion using [this issue template](https://github.com/RegExpTemplate/core/issues/new?assignees=&labels=suggestion&template=suggestion.md).
+If you think this is relevant to the core then please make your suggestion using [this issue template](https://github.com/RegExpTemplate/regexp-template-core/issues/new?assignees=&labels=suggestion&template=suggestion.md).
 
 
 

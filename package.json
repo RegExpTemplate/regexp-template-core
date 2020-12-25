@@ -22,10 +22,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RegExpTemplate/core.git"
+    "url": "git+https://github.com/RegExpTemplate/regexp-template-core.git"
   },
   "bugs": {
-    "url": "https://github.com/RegExpTemplate/core/issues"
+    "url": "https://github.com/RegExpTemplate/regexp-template-core/issues"
   },
   "files": [
     "dist/**",
